@@ -25,4 +25,5 @@ class PiCamera:
         buffer.write(self.__getRandomColorVal())
       else:
         expression = "image_format = {0}".format(image_format)
-        raise PiCameraStubImageFormatException(expression, "Image format not supported by the PiCamera stub")
+        message = "Image format not supported by the PiCamera stub"
+        raise PiCameraStubImageFormatException(expression, message)

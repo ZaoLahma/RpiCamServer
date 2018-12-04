@@ -1,0 +1,7 @@
+{
+  "app_port_no" : 4460,
+  "image_x_res" : 640,
+  "image_y_res" : 480,
+  "image_format" : "rgb",
+  "image_rotation" : 180
+}
