@@ -1,7 +1,10 @@
 {
-  "app_port_no" : 4460,
+  "image_data_port_no" : 3070,
   "image_x_res" : 640,
   "image_y_res" : 480,
   "image_format" : "rgb",
-  "image_rotation" : 180
+  "image_rotation" : 180,
+  "service_discovery_active" : true,
+  "service_discovery_listener_port" : 3070,
+  "service_discovery_header" : "WHERE_IS"
 }
