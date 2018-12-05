@@ -12,6 +12,6 @@ class DemoApi:
       print("Connected to API at address {0}".format(host))
       command_size = (len(command)).to_bytes(4, byteorder='little')
       api_socket.sendall(command_size)
-      api_socket.sendall(command.encode())
+      api_socket.sendall(command.encode('utf-8'))
     api_socket.close()
     

@@ -32,4 +32,5 @@ class RpiCamCfg:
     return config_val
 
   def set_config_val(self, config_identifier, config_val):
-    print("Not implemented yet")
+    self.config['config'][config_identifier]['value'] = config_val
+    print("Set {0} to {1}".format(config_identifier, config_val))

@@ -21,7 +21,7 @@ class RpiCamApiClientHandler(Thread):
               data += packet
           except socket.timeout:
               pass
-      return data
+      return bytes(data)
 
   def run(self):
     print("RpiCamApiClientHandler started for client {0}".format(self.client_id))
@@ -29,11 +29,8 @@ class RpiCamApiClientHandler(Thread):
     while self.active:
       header_size = 4
       header = self.__receive_blocking(header_size)
-      print("header {0}".format(header))
       data_size = bytearray(header[0:4])
-      print("data_size bytearray {0}".format(data_size))
       data_size = struct.unpack("<L", data_size)[0]
-      print("data_size {0}".format(data_size))
       data = self.__receive_blocking(data_size)
       self.api.handle_client_request(self, data)
 

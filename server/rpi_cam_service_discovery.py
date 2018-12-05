@@ -32,8 +32,8 @@ class RpiCamServiceDiscovery:
         raise
     else:
         print("RpiCamServiceDiscovery::__handle_service_discovery_requests: New service request for " + str(request[0]) + " received from " + str(request[1]))
-        reqString = str(request[0], 'utf-8')
-        requested_port_no = reqString
+        req_string = request[0].decode('utf-8')
+        requested_port_no = req_string
         if requested_port_no.endswith("\x00"):
             requested_port_no = requested_port_no[:-1]
         service_provided = False

@@ -1,9 +1,11 @@
 import socket
 import rpi_cam_api_client_handler
+import json
 
 class RpiCamApi():
   def __init__(self, config, service_discovery):
-    print("RpiCamApi starting")
+    print('RpiCamApi starting')
+    self.config = config
     self.requests = []
     self.client_handlers = []
     self.portNo = config.get_config_val('api_port_no')
@@ -23,11 +25,20 @@ class RpiCamApi():
     except:
         raise
     else:
-        print("RpiCamApi::__handle_new_connections: Connected to by " + str(address))
+        print('RpiCamApi::__handle_new_connections: Connected to by ' + str(address))
         self.client_handlers.append(client_handler)
 
   def handle_client_request(self, client_handler, request):
-    print("Received request {0} from client {1}".format(''.join(map(chr, request)), client_handler.client_id))
+    req_string = request.decode('utf-8')
+    print('Received request {0} from client {1}'.format(req_string, client_handler.client_id))
+    json_object = json.loads(req_string)
+    print('json_object {0}'.format(json_object))
+    req_types = json_object.keys()
+    for req_type in req_types:
+      print('req_type {0}'.format(req_type))
+      if 'config' == req_type:
+        for config_item in json_object[req_type].keys():
+          self.config.set_config_val(config_item, json_object[req_type][config_item])
 
   def runnable(self):
     self.__handle_new_connections()
