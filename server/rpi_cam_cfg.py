@@ -20,12 +20,16 @@ class RpiCamCfg:
     json_contents = ''.join(json_contents)
     self.config = json.loads(json_contents)
 
-  def get_config(self, config_identifier):
+  def get_config_val(self, config_identifier):
     config_val = None
     try:
-      config_val = self.config[config_identifier]
+      config_val = self.config['config'][config_identifier]['value']
     except KeyError:
       expression = "config_identifier = {0}".format(config_identifier)
       message = "Config identifier not found in configuration"
       raise RpiCamCfgInvalidCfgKeyException(expression, message)
+    print("{0} set to {1}".format(config_identifier, config_val))
     return config_val
+
+  def set_config_val(self, config_identifier, config_val):
+    print("Not implemented yet")

@@ -1,10 +1,36 @@
 {
-  "image_data_port_no" : 3070,
-  "image_x_res" : 640,
-  "image_y_res" : 480,
-  "image_format" : "rgb",
-  "image_rotation" : 180,
-  "service_discovery_active" : true,
-  "service_discovery_listener_port" : 3070,
-  "service_discovery_header" : "WHERE_IS"
+  "config" : {
+    "image_data_port_no" : {
+      "type" : "int", 
+      "value" : 3070
+    },
+    "image_x_res" : {
+      "type" : "int",
+      "value" : 640
+    },
+    "image_y_res" : {
+      "type" : "int",
+      "value" : 480
+    },
+    "image_format" : {
+      "type" : "str",
+      "value" : "rgb"
+    },
+    "image_rotation" : {
+      "type" : "int",
+      "value" : 180
+    },
+    "service_discovery_active" :  {
+      "type" : "bool",
+      "value" : true
+    },
+    "service_discovery_listener_port" : {
+      "type" : "int",
+      "value" : 3000
+    },
+    "api_port_no" : {
+      "type": "int",
+      "value" : 4440
+    }
+  }
 }

@@ -7,19 +7,15 @@ except ImportError:
 import io
 
 class RpiCamHwIf:
-  def __init__(self, nwIf, resolution, image_format, rotation):
+  def __init__(self, config, nwIf):
     self.nwIf = nwIf
     self.camera = picamera.PiCamera()
-    self.camera.resolution = resolution
-    self.camera.rotation = rotation
-    self.image_format = image_format
+    self.camera.resolution = (config.get_config_val('image_x_res'), config.get_config_val('image_y_res'))
+    self.camera.rotation = config.get_config_val('image_rotation')
+    self.image_format = config.get_config_val('image_format')
 
   def runnable(self):
       currImage = io.BytesIO()
-      xRes = self.camera.resolution[0]
-      yRes = self.camera.resolution[1]
-      currImage.write(xRes.to_bytes(2, byteorder='little'))
-      currImage.write(yRes.to_bytes(2, byteorder='little'))
       self.camera.capture(currImage, self.image_format, use_video_port=True)
       self.nwIf.send(bytearray(currImage.getvalue()))
 
