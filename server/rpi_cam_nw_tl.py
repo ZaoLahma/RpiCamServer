@@ -19,6 +19,7 @@ class RpiCamNwTL:
     header_size = 4
     header = RpiCamNwTL.receive_blocking(receiver, socket, header_size)
     data_size = bytearray(header[0:4])
+    print("RpiCamNwTL received data_size: {0}".format(data_size))
     data_size = struct.unpack("<L", data_size)[0]
     data = RpiCamNwTL.receive_blocking(receiver, socket, data_size)
     return data

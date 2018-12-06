@@ -7,7 +7,7 @@ class RpiCamCmdHandler:
   def handle_commands(self, commands):
     for command in commands:
       self.handle_command(command)
-    return '{ "resp" : { "commands" : "OK" } }'
+    return "OK"
 
   def handle_command(self, command):
     print('RpiCamCmdHandler::handle_command {0}'.format(command))

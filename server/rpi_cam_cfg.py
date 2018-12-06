@@ -34,7 +34,7 @@ class RpiCamCfg:
   def set_config(self, config):
     for config_item in config.keys():
       self.set_config_val(config_item, config[config_item])
-    return '{ "resp" : { "config" : "OK" } }'
+    return "OK"
 
   def set_config_val(self, config_identifier, config_val):
     self.config['config'][config_identifier]['value'] = config_val
