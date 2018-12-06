@@ -55,9 +55,9 @@ class RpiCamApi():
     for req_type in req_types:
       print('req_type {0}'.format(req_type))
       if 'config' == req_type:
-        response['response'][req_type] = self.config.set_config(json_object['request'][req_type])
+        response['response'].update(self.config.set_config(json_object['request'][req_type]))
       elif 'commands' == req_type:
-        response['response'][req_type] = self.cmd_handler.handle_commands(json_object['request'][req_type])
+        response['response'].update(self.cmd_handler.handle_commands(json_object['request'][req_type]))
     response = json.dumps(response)
     client_handler.send(response.encode('utf-8'))
 
