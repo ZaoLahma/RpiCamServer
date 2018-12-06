@@ -6,6 +6,10 @@ class RpiCamScheduler:
   def register_runnable(self, runnable):
     self.runnables.append(runnable)
 
+  def stop(self):
+    self.active = False
+    self.runnables = []
+
   def run(self):
     self.active = True
     while self.active:

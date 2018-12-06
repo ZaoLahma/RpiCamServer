@@ -1,6 +1,7 @@
 from threading import Thread
 import socket
 import struct
+import rpi_cam_nw_tl
 
 class RpiCamApiClientHandler(Thread):
   def __init__(self, client_id, api, connection):
@@ -11,29 +12,22 @@ class RpiCamApiClientHandler(Thread):
     self.start()
     self.active = False
 
-  def __receive_blocking(self, numBytes):
-      data = []
-      while len(data) < numBytes:
-          try:
-              packet = self.connection[0].recv(numBytes - len(data))
-              if not packet:
-                  continue
-              data += packet
-          except socket.timeout:
-              pass
-      return bytes(data)
-
   def run(self):
     print("RpiCamApiClientHandler started for client {0}".format(self.client_id))
     self.active = True
     while self.active:
-      header_size = 4
-      header = self.__receive_blocking(header_size)
-      data_size = bytearray(header[0:4])
-      data_size = struct.unpack("<L", data_size)[0]
-      data = self.__receive_blocking(data_size)
+      data = rpi_cam_nw_tl.RpiCamNwTL.receive_data(self, self.connection[0])
       self.api.handle_client_request(self, data)
 
+  def is_active(self):
+      return self.active
 
   def send(self, data):
-    self.connection[0].sendall(data)
+    try:
+      rpi_cam_nw_tl.RpiCamNwTL.send_data(self.connection[0], data)
+    except Exception as e:
+      self.stop()
+      print('Failed to send response to client due to {0}'.format(e))
+
+  def stop(self):
+    self.active = False
