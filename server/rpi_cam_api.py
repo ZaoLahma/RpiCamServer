@@ -37,8 +37,9 @@ class RpiCamApi():
     for req_type in req_types:
       print('req_type {0}'.format(req_type))
       if 'config' == req_type:
-        for config_item in json_object[req_type].keys():
-          self.config.set_config_val(config_item, json_object[req_type][config_item])
+        self.config.set_config(json_object[req_type])
+      elif 'command' == req_type:
+        print("Command received")
 
   def runnable(self):
     self.__handle_new_connections()

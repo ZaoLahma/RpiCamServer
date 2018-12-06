@@ -31,6 +31,10 @@ class RpiCamCfg:
     print("{0} set to {1}".format(config_identifier, config_val))
     return config_val
 
+  def set_config(self, config):
+    for config_item in config.keys():
+      self.set_config_val(config_item, config[config_item])
+
   def set_config_val(self, config_identifier, config_val):
     self.config['config'][config_identifier]['value'] = config_val
     print("Set {0} to {1}".format(config_identifier, config_val))
