@@ -25,7 +25,7 @@ class RpiCamStreamNwIf:
       self.__handle_new_connections()
 
   def __init_internal(self):
-    self.portNo = self.config.get_config_val('image_data_port_no')
+    self.portNo = int(self.config.get_config_val('image_data_port_no'))
     self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     self.server_socket.bind(('', self.portNo))

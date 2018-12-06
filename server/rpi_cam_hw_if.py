@@ -10,8 +10,8 @@ class RpiCamHwIf:
   def __init__(self, config, nwIf):
     self.nwIf = nwIf
     self.camera = picamera.PiCamera()
-    self.camera.resolution = (config.get_config_val('image_x_res'), config.get_config_val('image_y_res'))
-    self.camera.rotation = config.get_config_val('image_rotation')
+    self.camera.resolution = (int(config.get_config_val('image_x_res')), int(config.get_config_val('image_y_res')))
+    self.camera.rotation = int(config.get_config_val('image_rotation'))
     self.image_format = config.get_config_val('image_format')
 
   def runnable(self):

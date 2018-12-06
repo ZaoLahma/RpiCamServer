@@ -12,7 +12,7 @@ class RpiCamApi():
 
   def __init_internal(self):
     print('RpiCamApi starting')
-    self.portNo = self.config.get_config_val('api_port_no')
+    self.portNo = int(self.config.get_config_val('api_port_no'))
     self.service_discovery.add_service(self.portNo)
     self.requests = []
     self.client_handlers = []
@@ -50,8 +50,7 @@ class RpiCamApi():
     json_object = json.loads(req_string)
     print('json_object {0}'.format(json_object))
     req_types = json_object['request'].keys()
-    response = {}
-    response['response'] = {}
+    response = {'response' : {}}
     for req_type in req_types:
       print('req_type {0}'.format(req_type))
       if 'config' == req_type:

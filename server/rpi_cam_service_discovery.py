@@ -9,7 +9,7 @@ def get_own_ip():
 
 class RpiCamServiceDiscovery:
   def __init__(self, config):
-    self.listener_port = config.get_config_val('service_discovery_listener_port')
+    self.listener_port = int(config.get_config_val('service_discovery_listener_port'))
     self.services = []
     self.own_ip = get_own_ip()
     self.serviceListenerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
