@@ -1,5 +1,5 @@
 # RpiCamServer
-A TCP server that allows transmission of pixel data from the Raspberry Pi camera to the local network. It currently supports fetching individual images, as well as sending a stream of images over the local network.
+A TCP server that allows transmission of pixel data from the Raspberry Pi camera to the local network. It currently supports fetching individual images, as well as sending a stream of images over the local network. The communication towards the RpiCamServer is done through a simple json interface.
 
 The demo project serves as an API description for now. Might put more effort into a better description later.
 
