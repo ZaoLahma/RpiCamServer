@@ -1,5 +1,6 @@
 import demo_service_discover
 import demo_api
+import demo_image_creator
 import json
 
 class DemoMain:
@@ -34,11 +35,20 @@ class DemoMain:
     config = json.loads(api_response)
     image_data_port_no = int(config['response']['commands']['get_config']['result']['config']['image_data_port_no']['value'])
     data_socket = demo_api.DemoApi.connect((api_ip_address, image_data_port_no))
+    
+    #Lower the image resolution to avoid having to wait forever for the image data
+    api_test_string = '{ "request" : { "config" : { "image_x_res" : "50", "image_y_res" : "50" } } }'
+    demo_api.DemoApi.send_command(api_socket, api_test_string)
+    api_response = demo_api.DemoApi.receive_response(api_socket).decode('utf-8')
+    print('Received response {0}'.format(api_response))
+
+    #Request an image
     api_test_string = '{ "request" : { "commands" : [ "capture_image" ] } }'
     demo_api.DemoApi.send_command(api_socket, api_test_string)
     #This should typically be done in another thread
     print('Waiting for image data. This might take a while...')
     image_data = demo_api.DemoApi.receive_response(data_socket)
+    demo_image_creator.DemoImageCreator.create_color_image('test.ppm', 50, 50, image_data)
     print('{0} bytes image data received'.format(len(image_data)))
     #Let's check if the server accepted the request
     api_response = demo_api.DemoApi.receive_response(api_socket).decode('utf-8')
