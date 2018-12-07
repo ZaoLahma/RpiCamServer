@@ -11,7 +11,8 @@ class RpiCamCfgInvalidCfgKeyException(RpiCamCfgException):
 
 class RpiCamCfg:
   CFG_FILE_PATH = './config/rpi_cam_cfg.json'
-  def __init__(self):
+  def __init__(self, cmd_handler):
+    cmd_handler.register_command('get_config', self.get_config)
     curr_path = os.path.abspath(os.path.dirname(__file__))
     json_contents = None
     self.cfg_file_path = os.path.join(curr_path, self.CFG_FILE_PATH)
@@ -19,6 +20,11 @@ class RpiCamCfg:
       json_contents = json_file.readlines()
     json_contents = ''.join(json_contents)
     self.config = json.loads(json_contents)
+
+  def get_config(self):
+    response = {"RpiCamCfg" : "OK"}
+    response.update(self.config)
+    return response
 
   def get_config_val(self, config_identifier):
     config_val = None

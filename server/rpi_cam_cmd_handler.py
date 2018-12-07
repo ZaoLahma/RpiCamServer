@@ -6,23 +6,19 @@ class RpiCamCmdHandler:
   def handle_commands(self, commands):
     response = {'commands' : {}}
     for command in commands:
-      response['commands'].update(self.handle_command_new(command))
+      response['commands'].update(self.handle_command(command))
     return response
 
-  def handle_command_new(self, command):
-    print('handle_command_new {0}'.format(command))
+  def handle_command(self, command):
+    print('handle_command {0}'.format(command))
+    response = {command : {}}
     try:
       handlers = self.commands[command]
-      command_valid = True
       for handler in handlers:
-        if False == handler():
-          command_valid = False
-      if True == command_valid:
-        return {"{0}".format(command) : "OK"}
-      else:
-        return {"{0}".format(command) : "NOK - Command not handled in this state"}
+        response[command].update(handler())
     except:
-      return {"{0}".format(command) : "NOK - Command not recognized"}
+      response[command].update({"{0}".format(command) : "NOK - Command not recognized"})
+    return response
 
   def register_command(self, command, handler):
     try:

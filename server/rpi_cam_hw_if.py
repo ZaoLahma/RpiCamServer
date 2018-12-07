@@ -31,17 +31,17 @@ class RpiCamHwIf:
     if self.active == False:
       self.__init_internal()
       self.__capture_and_send_image(False)
-      return True
+      return {"RpiCamHwIf" : "OK"}
     else:
-      return False
+      return {"RpiCamHwIf" : "NOK - Command not handled in current state"}
 
   def start(self):
     self.active = True
-    return True
+    return {"{0}".format("RpiCamHwIf") : "OK"}
 
   def stop(self):
     self.active = False
-    return True
+    return {"{0}".format("RpiCamHwIf") : "OK"}
 
   def runnable(self):
       if self.active:

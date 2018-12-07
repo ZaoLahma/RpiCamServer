@@ -9,23 +9,24 @@ def get_own_ip():
 
 class RpiCamServiceDiscovery:
   def __init__(self, config):
+    self.broadcast_group_id = config.get_config_val('broadcast_group_id')
     self.listener_port = int(config.get_config_val('service_discovery_listener_port'))
     self.services = []
     self.own_ip = get_own_ip()
-    self.serviceListenerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    self.serviceListenerSocket.bind(('224.1.1.1', self.listener_port))
-    self.serviceListenerSocket.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF,
-                    socket.inet_aton(self.own_ip))
-    self.serviceListenerSocket.setsockopt(socket.SOL_IP,
-                                          socket.IP_ADD_MEMBERSHIP,
-                                          socket.inet_aton('224.1.1.1') +
-                                          socket.inet_aton(self.own_ip))
+    self.service_listener_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    self.service_listener_socket.bind((self.broadcast_group_id, self.listener_port))
+    self.service_listener_socket.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF,
+                                            socket.inet_aton(self.own_ip))
+    self.service_listener_socket.setsockopt(socket.SOL_IP,
+                                            socket.IP_ADD_MEMBERSHIP,
+                                            socket.inet_aton('224.1.1.1') +
+                                            socket.inet_aton(self.own_ip))
 
-    self.serviceListenerSocket.settimeout(0.001)
+    self.service_listener_socket.settimeout(0.001)
 
   def __handle_service_discovery_requests(self):
     try:
-        request = self.serviceListenerSocket.recvfrom(4096)
+        request = self.service_listener_socket.recvfrom(4096)
     except socket.timeout:
         pass
     except:

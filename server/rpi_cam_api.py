@@ -44,7 +44,7 @@ class RpiCamApi():
     for client_handler in self.client_handlers:
       client_handler.stop()
     self.connections = []
-    return True
+    return {"{0}".format("RpiCamApi") : "OK"}
 
   def handle_client_request(self, client_handler, request):
     req_string = request.decode('utf-8')

@@ -11,9 +11,9 @@ class Main:
   def main():
     print('RpiCamServer starting')
 
-    config = rpi_cam_cfg.RpiCamCfg()
-
     cmd_handler = rpi_cam_cmd_handler.RpiCamCmdHandler()
+
+    config = rpi_cam_cfg.RpiCamCfg(cmd_handler)
 
     scheduler = rpi_cam_scheduler.RpiCamScheduler(cmd_handler)
 
