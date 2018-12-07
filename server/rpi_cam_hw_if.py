@@ -8,9 +8,9 @@ import io
 
 class RpiCamHwIf:
   def __init__(self, config, cmd_handler, nwIf):
-    cmd_handler.register_command('start_streaming', self)
-    cmd_handler.register_command('stop_streaming', self)
-    cmd_handler.register_command('capture_image', self)
+    cmd_handler.register_command('start_streaming', self.start)
+    cmd_handler.register_command('stop_streaming', self.stop)
+    cmd_handler.register_command('capture_image', self.capture_image)
     self.config = config
     self.nwIf = nwIf
     self.camera = picamera.PiCamera()
@@ -35,23 +35,13 @@ class RpiCamHwIf:
     else:
       return False
 
-  def handle_command(self, command):
-    valid_command = True
-    if 'start_streaming' == command:
-      self.start()
-    elif 'stop_streaming' == command:
-      self.stop()
-    elif 'capture_image' == command:
-      valid_command = self.capture_image
-    else:
-      valid_command = False
-    return valid_command
-
   def start(self):
     self.active = True
+    return True
 
   def stop(self):
     self.active = False
+    return True
 
   def runnable(self):
       if self.active:

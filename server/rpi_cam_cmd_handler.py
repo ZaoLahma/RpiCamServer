@@ -12,10 +12,10 @@ class RpiCamCmdHandler:
   def handle_command_new(self, command):
     print('handle_command_new {0}'.format(command))
     try:
-      actors = self.commands[command]
+      handlers = self.commands[command]
       command_valid = True
-      for actor in actors:
-        if False == actor.handle_command(command):
+      for handler in handlers:
+        if False == handler():
           command_valid = False
       if True == command_valid:
         return {"{0}".format(command) : "OK"}
@@ -24,9 +24,9 @@ class RpiCamCmdHandler:
     except:
       return {"{0}".format(command) : "NOK - Command not recognized"}
 
-  def register_command(self, command, actor):
+  def register_command(self, command, handler):
     try:
       self.commands[command]
     except:
       self.commands[command] = []
-    self.commands[command].append(actor)
+    self.commands[command].append(handler)

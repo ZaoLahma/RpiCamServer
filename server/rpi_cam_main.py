@@ -1,6 +1,6 @@
 import rpi_cam_hw_if
 import rpi_cam_scheduler
-import rpi_cam_stream_nw_if
+import rpi_cam_image_nw_if
 import rpi_cam_service_discovery
 import rpi_cam_cfg
 import rpi_cam_api
@@ -18,12 +18,12 @@ class Main:
     scheduler = rpi_cam_scheduler.RpiCamScheduler(cmd_handler)
 
     service_discovery = rpi_cam_service_discovery.RpiCamServiceDiscovery(config)
-    stream_nw_if = rpi_cam_stream_nw_if.RpiCamStreamNwIf(config, service_discovery)
-    camera = rpi_cam_hw_if.RpiCamHwIf(config, cmd_handler, stream_nw_if)
+    image_nw_if = rpi_cam_image_nw_if.RpiCamImageNwIf(config, service_discovery)
+    camera = rpi_cam_hw_if.RpiCamHwIf(config, cmd_handler, image_nw_if)
     api = rpi_cam_api.RpiCamApi(config, cmd_handler, service_discovery)
 
     scheduler.register_runnable(camera.runnable)
-    scheduler.register_runnable(stream_nw_if.runnable)
+    scheduler.register_runnable(image_nw_if.runnable)
     scheduler.register_runnable(service_discovery.runnable)
     scheduler.register_runnable(api.runnable)
     scheduler.run()

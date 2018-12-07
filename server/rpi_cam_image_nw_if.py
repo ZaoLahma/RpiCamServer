@@ -1,7 +1,7 @@
 import socket
 import rpi_cam_nw_tl
 
-class RpiCamStreamNwIf:
+class RpiCamImageNwIf:
   def __init__(self, config, service_discovery):
     self.config = config
     self.service_discovery = service_discovery
