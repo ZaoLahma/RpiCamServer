@@ -1,29 +1,32 @@
 class RpiCamCmdHandler:
-  def __init__(self, scheduler):
+  def __init__(self):
     print('RpiCamCmdHandler ready to handle commands')
-    self.actors = []
-    self.scheduler = scheduler
+    self.commands = {}
 
   def handle_commands(self, commands):
+    response = {'commands' : {}}
     for command in commands:
-      self.handle_command(command)
-    response = {'commands' : "OK"}
+      response['commands'].update(self.handle_command_new(command))
     return response
 
-  def handle_command(self, command):
-    print('RpiCamCmdHandler::handle_command {0}'.format(command))
-    if 'stop' == command:
-      for actor in self.actors:
-        actor.stop()
-    elif 'start' == command:
-      for actor in self.actors:
-        actor.start()
-    elif 'restart' == command:
-      self.handle_command('stop')
-      self.handle_command('start')
-    elif 'kill_server_process' == command:
-      self.handle_command('stop')
-      self.scheduler.stop()
+  def handle_command_new(self, command):
+    print('handle_command_new {0}'.format(command))
+    try:
+      actors = self.commands[command]
+      command_valid = True
+      for actor in actors:
+        if False == actor.handle_command(command):
+          command_valid = False
+      if True == command_valid:
+        return {"{0}".format(command) : "OK"}
+      else:
+        return {"{0}".format(command) : "NOK - Command not handled in this state"}
+    except:
+      return {"{0}".format(command) : "NOK - Command not recognized"}
 
-  def register_actor(self, actor):
-    self.actors.append(actor)
+  def register_command(self, command, actor):
+    try:
+      self.commands[command]
+    except:
+      self.commands[command] = []
+    self.commands[command].append(actor)

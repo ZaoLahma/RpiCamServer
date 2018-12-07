@@ -4,6 +4,7 @@ import json
 
 class RpiCamApi():
   def __init__(self, config, cmd_handler, service_discovery):
+    cmd_handler.register_command('kill_server_process', self)
     self.active = False
     self.config = config
     self.cmd_handler = cmd_handler
@@ -34,6 +35,12 @@ class RpiCamApi():
     else:
         print('RpiCamApi::__handle_new_connections: Connected to by ' + str(address))
         self.client_handlers.append(client_handler)
+
+  def handle_command(self, command):
+    if 'kill_server_process' == command:
+      self.stop()
+      return True
+    return False
 
   def start(self):
     self.__init_internal()

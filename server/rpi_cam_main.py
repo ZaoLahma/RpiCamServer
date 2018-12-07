@@ -13,17 +13,14 @@ class Main:
 
     config = rpi_cam_cfg.RpiCamCfg()
 
-    scheduler = rpi_cam_scheduler.RpiCamScheduler()
+    cmd_handler = rpi_cam_cmd_handler.RpiCamCmdHandler()
 
-    cmd_handler = rpi_cam_cmd_handler.RpiCamCmdHandler(scheduler)
+    scheduler = rpi_cam_scheduler.RpiCamScheduler(cmd_handler)
 
     service_discovery = rpi_cam_service_discovery.RpiCamServiceDiscovery(config)
     stream_nw_if = rpi_cam_stream_nw_if.RpiCamStreamNwIf(config, service_discovery)
-    camera = rpi_cam_hw_if.RpiCamHwIf(config, stream_nw_if)
+    camera = rpi_cam_hw_if.RpiCamHwIf(config, cmd_handler, stream_nw_if)
     api = rpi_cam_api.RpiCamApi(config, cmd_handler, service_discovery)
-
-    cmd_handler.register_actor(api)
-    cmd_handler.register_actor(stream_nw_if)
 
     scheduler.register_runnable(camera.runnable)
     scheduler.register_runnable(stream_nw_if.runnable)

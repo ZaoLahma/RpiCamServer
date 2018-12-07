@@ -5,13 +5,15 @@ class RpiCamNwTL:
   def receive_blocking(receiver, socket, num_bytes):
     data = []
     while (len(data) < num_bytes) and receiver.is_active():
-        try:
-            packet = socket.recv(num_bytes - len(data))
-            if not packet:
-                continue
-            data += packet
-        except socket.timeout:
-            pass
+      try:
+        packet = socket.recv(num_bytes - len(data))
+        if not packet:
+          continue
+        data += packet
+      except socket.timeout:
+        pass
+      except ConnectionResetError:
+        break
     return bytes(data)
 
   @staticmethod
