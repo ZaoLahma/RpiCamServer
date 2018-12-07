@@ -22,8 +22,9 @@ class RpiCamCfg:
     self.config = json.loads(json_contents)
 
   def get_config(self):
-    response = {"RpiCamCfg" : "OK"}
-    response.update(self.config)
+    response = {"RpiCamCfg" : "Called"}
+    response['result'] = {}
+    response['result'].update(self.config)
     return response
 
   def get_config_val(self, config_identifier):

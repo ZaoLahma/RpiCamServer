@@ -32,7 +32,22 @@ class DemoMain:
 
     #Let's find the image_data_port_no
     config = json.loads(api_response)
-    image_data_port_no = config['response']['commands']['get_config']['config']['image_data_port_no']
+    image_data_port_no = int(config['response']['commands']['get_config']['result']['config']['image_data_port_no']['value'])
+    data_socket = demo_api.DemoApi.connect((api_ip_address, image_data_port_no))
+    api_test_string = '{ "request" : { "commands" : [ "capture_image" ] } }'
+    demo_api.DemoApi.send_command(api_socket, api_test_string)
+    #This should typically be done in another thread
+    print('Waiting for image data. This might take a while...')
+    image_data = demo_api.DemoApi.receive_response(data_socket)
+    print('{0} bytes image data received'.format(len(image_data)))
+    #Let's check if the server accepted the request
+    api_response = demo_api.DemoApi.receive_response(api_socket).decode('utf-8')
+    print('Received response {0}'.format(api_response))
+    response = json.loads(api_response)
+    result = response['response']['commands']['capture_image']['result']
+    if "OK" == result:
+      print("API reports OK")
+    data_socket.close()
 
     #Two valid commands followed by two invalid
     api_test_string = '{ "request" : { "commands" : [ "capture_image", "start_streaming", "thisshouldfail", "anotherfailcommand" ] } }'

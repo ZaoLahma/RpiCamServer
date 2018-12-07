@@ -6,7 +6,7 @@ class RpiCamImageNwIf:
     self.config = config
     self.service_discovery = service_discovery
     self.connections = []
-    self.active = False
+    self.start()
 
   def __handle_new_connections(self):
     try:
@@ -17,7 +17,7 @@ class RpiCamImageNwIf:
     except:
         raise
     else:
-        print("RpiCamStreamNwIf::__handle_new_connections: Connected to by " + str(address))
+        print("RpiCamImageNwIf::__handle_new_connections: Connected to by " + str(address))
         self.connections.append((connection, address))
 
   def runnable(self):
@@ -45,7 +45,7 @@ class RpiCamImageNwIf:
   def send(self, data):
     for connection in self.connections:
       try:
-        rpi_cam_nw_tl.RpiCamNwTL.send_data(data, connection[0])
+        rpi_cam_nw_tl.RpiCamNwTL.send_data(connection[0], data)
       except Exception as e:
         print('Closing connection due to {0}'.format(e))
         self.connections.remove(connection)

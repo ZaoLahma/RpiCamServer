@@ -40,11 +40,13 @@ class RpiCamApi():
     self.__init_internal()
 
   def stop(self):
+    response = {"RpiCamApi" : "Called"}
     self.active = False
     for client_handler in self.client_handlers:
       client_handler.stop()
     self.connections = []
-    return {"{0}".format("RpiCamApi") : "OK"}
+    response['result'] = "OK"
+    return response
 
   def handle_client_request(self, client_handler, request):
     req_string = request.decode('utf-8')

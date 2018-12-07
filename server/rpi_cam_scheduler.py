@@ -8,9 +8,11 @@ class RpiCamScheduler:
     self.runnables.append(runnable)
 
   def stop(self):
+    response = {"RpiCamScheduler" : "Called"}
+    response['result'] = "OK"
     self.active = False
     self.runnables = []
-    return {"RpiCamScheduler" : "OK"}
+    return response
 
   def run(self):
     self.active = True

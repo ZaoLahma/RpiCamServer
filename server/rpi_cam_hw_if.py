@@ -28,16 +28,20 @@ class RpiCamHwIf:
     self.nwIf.send(bytearray(currImage.getvalue()))
 
   def capture_image(self):
+    response = {"RpiCamHwIf" : "Called"}
     if self.active == False:
       self.__init_internal()
       self.__capture_and_send_image(False)
-      return {"RpiCamHwIf" : "OK"}
+      response['result'] = "OK"
     else:
-      return {"RpiCamHwIf" : "NOK - Command not handled in current state"}
+      response['result'] = "NOK - Command not handled in current state"
+    return response
 
   def start(self):
+    response = {"RpiCamHwIf" : "Called"}
     self.active = True
-    return {"{0}".format("RpiCamHwIf") : "OK"}
+    response['result'] = "OK"
+    return response
 
   def stop(self):
     self.active = False
