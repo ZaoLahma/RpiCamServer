@@ -1,7 +1,9 @@
 import demo_service_discover
 import demo_api
+import demo_image_viewer
 import demo_image_creator
 import json
+import time
 
 class DemoMain:
   @staticmethod
@@ -37,7 +39,8 @@ class DemoMain:
     data_socket = demo_api.DemoApi.connect((api_ip_address, image_data_port_no))
     
     #Lower the image resolution to avoid having to wait forever for the image data
-    api_test_string = '{ "request" : { "config" : { "image_x_res" : "50", "image_y_res" : "50" } } }'
+    low_res = (128, 128)
+    api_test_string = '{ "request" : { "config" : { "image_x_res" : "%u", "image_y_res" : "%u" } } }' % (low_res[0], low_res[1])
     demo_api.DemoApi.send_command(api_socket, api_test_string)
     api_response = demo_api.DemoApi.receive_response(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
@@ -48,7 +51,10 @@ class DemoMain:
     #This should typically be done in another thread
     print('Waiting for image data. This might take a while...')
     image_data = demo_api.DemoApi.receive_response(data_socket)
-    demo_image_creator.DemoImageCreator.create_color_image('test.ppm', 50, 50, image_data)
+    demo_image_creator.DemoImageCreator.create_color_image("test.ppm", low_res, image_data)
+    demo_viewer = demo_image_viewer.DemoImageViewer(low_res)
+    demo_viewer.show_image(image_data)
+    demo_viewer.main_loop()
     print('{0} bytes image data received'.format(len(image_data)))
     #Let's check if the server accepted the request
     api_response = demo_api.DemoApi.receive_response(api_socket).decode('utf-8')
