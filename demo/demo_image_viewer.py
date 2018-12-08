@@ -1,17 +1,37 @@
 import tkinter
+from threading import Thread
+from threading import Condition
+
+class DemoImageInjector(Thread):
+  def __init__(self, image_viewer, stream_client):
+    Thread.__init__(self)
+    self.image_viewer = image_viewer
+    self.stream_client = stream_client
+    self.active = False
+    self.start()
+
+  def run(self):
+    self.active = True
+    self.stream_client.start()
+    while self.active:
+      image_data = self.stream_client.get_image()
+      if self.active and None != image_data:
+        self.image_viewer.show_image(image_data)
+    print("DemoImageInjector stopped")
+
+  def stop(self):
+    self.active = False
+    self.stream_client.stop()
 
 #This is a very simple image viewer that would 
 #need to be implemented using something quicker
 #than tkinter
-class DemoImageViewer:
+class DemoImageViewer():
   def __init__(self, resolution):
     self.resolution = resolution
     self.root = tkinter.Tk()
     self.frame = tkinter.Frame(self.root)
     self.frame.pack()
-
-    self.bottomframe = tkinter.Frame(self.root)
-    self.bottomframe.pack(side = tkinter.BOTTOM)
 
     self.canvas = tkinter.Canvas(self.frame, width=self.resolution[0], height=self.resolution[1], bg="#000000")
     self.canvas.pack( side = tkinter.TOP )
@@ -21,6 +41,7 @@ class DemoImageViewer:
     self.root.resizable(False, False)
     self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
+    self.image_injector = None
     self.active = True
 
   def show_image(self, image):
@@ -52,11 +73,20 @@ class DemoImageViewer:
           hex_row.append(' {')
           x = 0
           y += 1
-    self.image.put(''.join(hex_image), to=(0, 0, self.resolution[0], self.resolution[1]))
+    if self.active and not self.image == None:
+      self.image.put(''.join(hex_image), to=(0, 0, self.resolution[0], self.resolution[1]))
+
+
+  def start_streaming(self, stream_client):
+    self.image_injector = DemoImageInjector(self, stream_client)
 
   def on_close(self):
-    self.root.destroy()
+    self.image = None
+    if None != self.image_injector:
+      self.image_injector.stop()
+      self.image_injector.join()
     self.active = False
+    self.root.destroy()
 
   def main_loop(self):
     self.root.mainloop()
