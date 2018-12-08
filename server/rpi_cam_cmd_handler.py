@@ -17,7 +17,7 @@ class RpiCamCmdHandler:
       for handler in handlers:
         response[command].update(handler())
     except:
-      response[command].update({"{0}".format(command) : "NOK - Command not recognized"})
+      response[command].update({"result" : "NOK - Command not recognized"})
     return response
 
   def register_command(self, command, handler):
