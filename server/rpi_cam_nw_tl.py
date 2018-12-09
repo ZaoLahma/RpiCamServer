@@ -14,7 +14,7 @@ class RpiCamNwTL:
         pass
       except ConnectionResetError:
         break
-    return bytes(data)
+    return bytearray(data)
 
   @staticmethod
   def receive_data(receiver, socket):
