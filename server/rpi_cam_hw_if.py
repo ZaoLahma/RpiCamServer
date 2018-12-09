@@ -23,9 +23,9 @@ class RpiCamHwIf:
     self.image_format = self.config.get_config_val('image_format')
 
   def __capture_and_send_image(self, use_video_port=True):
-    currImage = io.BytesIO()
-    self.camera.capture(currImage, self.image_format, use_video_port=use_video_port)
-    self.nwIf.send(bytearray(currImage.getvalue()))
+    curr_image = io.BytesIO()
+    self.camera.capture(curr_image, self.image_format, use_video_port=use_video_port)
+    self.nwIf.send(bytearray(curr_image.getvalue()))
 
   def capture_image(self):
     response = {"RpiCamHwIf" : "Called"}

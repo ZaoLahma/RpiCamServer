@@ -62,7 +62,13 @@ class RpiCamApi():
       elif 'commands' == req_type:
         response['response'].update(self.cmd_handler.handle_commands(json_object['request'][req_type]))
     response = json.dumps(response)
-    client_handler.send(response.encode('utf-8'))
+    try:
+      client_handler.send(response.encode('utf-8'))
+      if "True" == self.config.get_config_val('api_is_stateless'):
+        client_handler.stop()
+        self.client_handlers.remove(client_handler)
+    except:
+      self.client_handlers.remove(client_handler)
 
   def runnable(self):
     if self.active:

@@ -56,8 +56,8 @@ class RpiCamCfg:
       except:
         return {config_identifier : 'NOK - {0} not an integer'.format(config_val)}
     elif 'bool' == expected_data_type:
-      if config_val != 'true' and config_val != 'false':
-        return {config_identifier : 'Not true or false'}
+      if config_val != 'True' and config_val != 'False':
+        return {config_identifier : 'NOK - Not True or False'}
     
     self.config['config'][config_identifier]['value'] = str(config_val)
     with open(self.cfg_file_path, 'w') as json_file:

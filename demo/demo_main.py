@@ -52,8 +52,10 @@ class DemoMain:
     #This should typically be done in another thread
     print('Waiting for image data. This might take a while...')
     image_data = demo_nw_if.DemoNwIf.receive_data(data_socket)
-    demo_image_creator.DemoImageCreator.create_color_image("test.ppm", low_res, image_data)
-    print("Showing image...")
+    image_file_name = "test.ppm"
+    print('Saving image to {0}'.format(image_file_name))
+    demo_image_creator.DemoImageCreator.create_color_image(image_file_name, low_res, image_data)
+    print('Showing image...')
     demo_viewer = demo_image_viewer.DemoImageViewer(low_res)
     demo_viewer.show_image(image_data)
     demo_viewer.main_loop()
