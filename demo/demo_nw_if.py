@@ -34,7 +34,7 @@ class DemoNwIf:
         break
       except socket.timeout:
         pass
-    return bytes(data)
+    return bytearray(data)
 
   @staticmethod
   def receive_data(socket):

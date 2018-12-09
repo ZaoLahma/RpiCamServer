@@ -1,6 +1,5 @@
 import tkinter
 from threading import Thread
-from threading import Condition
 
 class DemoImageInjector(Thread):
   def __init__(self, image_viewer, stream_client):
