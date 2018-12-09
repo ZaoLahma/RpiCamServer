@@ -78,14 +78,21 @@ class DemoImageViewer():
 
 
   def start_streaming(self, stream_client):
+    self.bottomframe = tkinter.Frame(self.root)
+    self.bottomframe.pack(side = tkinter.BOTTOM)
+    self.stop_streaming = tkinter.Button(self.bottomframe, text="Stop streaming", fg="black", command=self.stop)
+    self.stop_streaming.pack( side = tkinter.BOTTOM)    
     self.image_injector = DemoImageInjector(self, stream_client)
 
-  def on_close(self):
+  def stop(self):
     self.image = None
     if None != self.image_injector:
       self.image_injector.stop()
-      self.image_injector.join()
+      #self.image_injector.join()
     self.active = False
+
+  def on_close(self):
+    self.stop()
     self.root.destroy()
 
   def main_loop(self):

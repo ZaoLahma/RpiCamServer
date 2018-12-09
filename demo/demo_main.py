@@ -40,7 +40,7 @@ class DemoMain:
     data_socket = demo_nw_if.DemoNwIf.connect((api_ip_address, image_data_port_no))
     
     #Lower the image resolution to avoid having to wait forever for the image data
-    low_res = (128, 128)
+    low_res = (256, 256)
     api_test_string = '{ "request" : { "config" : { "image_x_res" : "%u", "image_y_res" : "%u" } } }' % (low_res[0], low_res[1])
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
@@ -96,7 +96,7 @@ class DemoMain:
     print('Received response {0}'.format(api_response))
 
     #Last request shows a combination of a config request followed by a kill of the server process
-    api_test_string = '{ "request" : { "config" : { "image_data_port_no" : "3070" }, "commands" : [ "kill_server_process" ] } }'
+    api_test_string = '{ "request" : { "config" : { "image_data_port_no" : "3070" }, "commands" : [ "stop_streaming", "kill_server_process" ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     #We won't get a response from a kill_server_process request. Close the socket.
     api_socket.close()
