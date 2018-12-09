@@ -10,6 +10,3 @@ How to run the demo project:
 The rpi_cam_main.py needs to be running before the demo_main.py is started.
 
 The RpiCamServer has a camera stub built into it, so for testing purposes it doesn't need to be running on the Raspberry Pi hardware. If no real camera is attached, it will (slowly!) generate random pixel values that are pushed to the image interface.
-
-TODO:
-A simple GUI for the demo project
