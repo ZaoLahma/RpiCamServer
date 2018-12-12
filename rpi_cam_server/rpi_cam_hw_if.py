@@ -2,7 +2,7 @@ try:
     import picamera
 except ImportError:
     print("Not running on RPI - Using PiCamera stub")
-    import rpi_cam_picamera_stub as picamera
+    from . import rpi_cam_picamera_stub as picamera
 
 import io
 

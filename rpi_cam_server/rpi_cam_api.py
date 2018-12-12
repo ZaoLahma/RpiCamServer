@@ -1,5 +1,5 @@
 import socket
-import rpi_cam_api_client_handler
+from . import rpi_cam_api_client_handler
 import json
 
 class RpiCamApi():

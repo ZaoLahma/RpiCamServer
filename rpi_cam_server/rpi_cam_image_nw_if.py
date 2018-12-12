@@ -1,5 +1,5 @@
 import socket
-import rpi_cam_nw_tl
+from . import rpi_cam_nw_tl
 
 class RpiCamImageNwIf:
   def __init__(self, config, service_discovery):

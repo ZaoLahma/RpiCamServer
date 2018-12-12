@@ -1,7 +1,7 @@
 from threading import Thread
 import socket
 import struct
-import rpi_cam_nw_tl
+from . import rpi_cam_nw_tl
 
 class RpiCamApiClientHandler(Thread):
   def __init__(self, client_id, api, connection):
