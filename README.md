@@ -27,4 +27,5 @@ The RpiCamServer has a camera stub built into it, so for testing purposes it doe
 
 # Known issues
 The server will sometimes fail to parse the json properly.
+
 The json API is in need of refinement and will change in the future.
