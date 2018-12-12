@@ -23,7 +23,7 @@ python3 demo_main.py
 ```
 
 ### Non Raspberry Pi testing
-The RpiCamServer has a camera stub built into it, so for testing purposes it doesn't need to be running on the Raspberry Pi hardware. This means the server and demo project can be executed on the same machine. In this case the server will (slowly!) generate random pixel values that are pushed to the image interface to the demo project.
+The RpiCamServer has a camera stub built into it, so for testing purposes it doesn't need to be running on the Raspberry Pi hardware. This means the server and demo project can be executed on the same machine. In this case the server will (slowly!) generate random pixel values that are pushed to the demo project.
 
 # Known issues
 The server will sometimes fail to parse the json properly.
