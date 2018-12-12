@@ -29,3 +29,5 @@ The RpiCamServer has a camera stub built into it, so for testing purposes it doe
 The server will sometimes fail to parse the json properly.
 
 The json API is in need of refinement and will change in the future.
+
+There is no validation of the image resolution configuration. This might lead to the camera module returning images of a different resolution than has been configured.
