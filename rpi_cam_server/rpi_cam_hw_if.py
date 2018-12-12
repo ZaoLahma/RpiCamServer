@@ -28,7 +28,7 @@ class RpiCamHwIf:
     self.nwIf.send(bytearray(curr_image.getvalue()))
 
   def capture_image(self):
-    response = {"RpiCamHwIf" : "Called"}
+    response = {"debug" : "RpiCamHwIf called"}
     if self.active == False:
       self.__init_internal()
       self.__capture_and_send_image(False)

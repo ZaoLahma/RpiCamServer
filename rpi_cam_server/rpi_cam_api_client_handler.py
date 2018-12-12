@@ -16,8 +16,12 @@ class RpiCamApiClientHandler(Thread):
     print("RpiCamApiClientHandler started for client {0}".format(self.client_id))
     self.active = True
     while self.active:
-      data = rpi_cam_nw_tl.RpiCamNwTL.receive_data(self, self.connection[0])
-      self.api.handle_client_request(self, data)
+      try:
+        data = rpi_cam_nw_tl.RpiCamNwTL.receive_data(self, self.connection[0])
+        self.api.handle_client_request(self, data)
+      except:
+        self.stop()        
+        self.api.remove_client_handler(self)
 
   def is_active(self):
       return self.active
@@ -31,3 +35,4 @@ class RpiCamApiClientHandler(Thread):
 
   def stop(self):
     self.active = False
+    self.connection[0].close()

@@ -40,7 +40,7 @@ class RpiCamApi():
     self.__init_internal()
 
   def stop(self):
-    response = {"RpiCamApi" : "Called"}
+    response = {"debug" : "RpiCamApi called"}
     self.active = False
     for client_handler in self.client_handlers:
       client_handler.stop()
@@ -53,22 +53,38 @@ class RpiCamApi():
     print('Received request {0} from client {1}'.format(req_string, client_handler.client_id))
     json_object = json.loads(req_string)
     print('json_object {0}'.format(json_object))
-    req_types = json_object['request'].keys()
     response = {'response' : {}}
-    for req_type in req_types:
-      print('req_type {0}'.format(req_type))
-      if 'config' == req_type:
-        response['response'].update(self.config.set_config(json_object['request'][req_type]))
-      elif 'commands' == req_type:
-        response['response'].update(self.cmd_handler.handle_commands(json_object['request'][req_type]))
+    disconnect = False
+    print("json_object['request']: {0}".format(json_object['request']))
+    if 'disconnect' == json_object['request']:
+      print("Found disconnect")
+      disconnect = True
+      response['response'] = { json_object['request'] : {}}
+      response['response'][json_object['request']] = {'result' : 'OK'}
+    else:
+      req_types = json_object['request'].keys()
+      for req_type in req_types:
+        print('req_type {0}'.format(req_type))
+        if 'config' == req_type:
+          response['response'].update(self.config.set_config(json_object['request'][req_type]))
+        elif 'commands' == req_type:
+          response['response'].update(self.cmd_handler.handle_commands(json_object['request'][req_type]))
     response = json.dumps(response)
+
     try:
       client_handler.send(response.encode('utf-8'))
-      if "True" == self.config.get_config_val('api_is_stateless'):
+      if "True" == self.config.get_config_val('api_is_stateless') or disconnect:
         client_handler.stop()
-        self.client_handlers.remove(client_handler)
-    except:
+        self.remove_client_handler(client_handler)
+    except Exception as e:
+      print('Error when sending response to client: {0}'.encode(e))
+      self.remove_client_handler(client_handler)
+
+  def remove_client_handler(self, client_handler):
+    try:
       self.client_handlers.remove(client_handler)
+    except Exception as e:
+      print("Could not remove client_handler {0}".format(e))
 
   def runnable(self):
     if self.active:

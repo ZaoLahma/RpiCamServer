@@ -14,6 +14,8 @@ class DemoMain:
     #Find the API service on the local network
     api_service = 4440
     api_ip_address = demo_service_discover.DemoServiceDiscover.find_service(api_service)
+
+    #Connect to control interface
     api_socket = demo_nw_if.DemoNwIf.connect((api_ip_address, api_service))
 
     #Request update of configuration api_port_no and image_format
@@ -37,6 +39,8 @@ class DemoMain:
     #Let's find the image_data_port_no
     config = json.loads(api_response)
     image_data_port_no = int(config['response']['commands']['get_config']['result']['config']['image_data_port_no']['value'])
+    
+    #Connect to the image_data interface
     data_socket = demo_nw_if.DemoNwIf.connect((api_ip_address, image_data_port_no))
     
     #Lower the image resolution to avoid having to wait forever for the image data
@@ -96,6 +100,14 @@ class DemoMain:
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
+
+    #Disconnect and reestablish the connection
+    api_test_string = '{ "request" : "disconnect" }'
+    demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
+    api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
+    print('Received response {0}'.format(api_response))
+    api_socket.close()
+    api_socket = demo_nw_if.DemoNwIf.connect((api_ip_address, api_service))
 
     #Last request shows a combination of a config request followed by a kill of the server process
     api_test_string = '{ "request" : { "config" : { "image_data_port_no" : "3070" }, "commands" : [ "stop_streaming", "kill_server_process" ] } }'
