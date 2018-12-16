@@ -52,12 +52,9 @@ class RpiCamApi():
     req_string = request.decode('utf-8')
     print('Received request {0} from client {1}'.format(req_string, client_handler.client_id))
     json_object = json.loads(req_string)
-    print('json_object {0}'.format(json_object))
     response = {'response' : {}}
     disconnect = False
-    print("json_object['request']: {0}".format(json_object['request']))
     if 'disconnect' == json_object['request']:
-      print("Found disconnect")
       disconnect = True
       response['response'] = { json_object['request'] : {}}
       response['response'][json_object['request']] = {'result' : 'OK'}
