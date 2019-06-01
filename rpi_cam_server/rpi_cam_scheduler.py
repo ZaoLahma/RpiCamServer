@@ -7,7 +7,7 @@ class RpiCamScheduler:
   def register_runnable(self, runnable):
     self.runnables.append(runnable)
 
-  def stop(self):
+  def stop(self, command, args):
     response = {"debug" : "RpiCamScheduler called"}
     response['result'] = "OK"
     self.active = False

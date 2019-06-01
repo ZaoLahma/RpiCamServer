@@ -62,10 +62,7 @@ class RpiCamApi():
       req_types = json_object['request'].keys()
       for req_type in req_types:
         print('req_type {0}'.format(req_type))
-        if 'config' == req_type:
-          response['response'].update(self.config.set_config(json_object['request'][req_type]))
-        elif 'commands' == req_type:
-          response['response'].update(self.cmd_handler.handle_commands(json_object['request'][req_type]))
+        response['response'].update(self.cmd_handler.handle_commands(json_object['request'][req_type]))
     response = json.dumps(response)
 
     try:

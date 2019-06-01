@@ -4,19 +4,27 @@ class RpiCamCmdHandler:
     self.commands = {}
 
   def handle_commands(self, commands):
+    print('commands {0}'.format(commands))
     response = {'commands' : {}}
     for command in commands:
-      response['commands'].update(self.handle_command(command))
+      command_name = command['command']
+      args = None
+      try:
+        args = command['args']
+      except:
+        args = None
+      response['commands'].update(self.handle_command(command_name, args))
     return response
 
-  def handle_command(self, command):
+  def handle_command(self, command, args):
     print('handle_command {0}'.format(command))
     response = {command : {}}
     try:
       handlers = self.commands[command]
       for handler in handlers:
-        response[command].update(handler())
+        response[command].update(handler(command, args))
     except:
+      print('Failed to find handler for command. Registered commands {0}'.format(self.commands))
       response[command].update({"result" : "NOK - Command not recognized"})
     return response
 

@@ -19,19 +19,20 @@ class DemoMain:
     api_socket = demo_nw_if.DemoNwIf.connect((api_ip_address, api_service))
 
     #Request update of configuration api_port_no and image_format
-    api_test_string = '{ "request" : { "config" : { "api_port_no" : "4440" , "image_format" : "rgb" } } }'
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "set_config", "args" : { "api_port_no" : "4440" , "image_format" : "rgb" } } ] } }'
+
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
 
     #Setting an integer configuration parameter to something other than integer should fail
-    api_test_string = '{ "request" : { "config" : { "api_port_no" : "this3434shouldfail" } } }'
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "set_config", "args" : { "api_port_no" : "this3434shouldfail" } } ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
 
     #Request the configuration
-    api_test_string = '{ "request" : { "commands" : [ "get_config" ] } }'
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "get_config" } ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
@@ -45,13 +46,13 @@ class DemoMain:
     
     #Lower the image resolution to avoid having to wait forever for the image data
     low_res = (256, 256)
-    api_test_string = '{ "request" : { "config" : { "image_x_res" : "%u", "image_y_res" : "%u" } } }' % (low_res[0], low_res[1])
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "set_config", "args" : { "image_x_res" : "%u", "image_y_res" : "%u" } } ] } }' % (low_res[0], low_res[1])
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
 
     #Request an image
-    api_test_string = '{ "request" : { "commands" : [ "capture_image" ] } }'
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "capture_image" } ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     #This should typically be done in another thread
     print('Waiting for image data. This might take a while...')
@@ -74,7 +75,7 @@ class DemoMain:
     data_socket.close()
 
     #One valid command followed by two invalid
-    api_test_string = '{ "request" : { "commands" : [ "capture_image", "thisshouldfail", "anotherfailcommand" ] } }'
+    api_test_string = '{ "request" : { "commands" : [ {"command" : "capture_image" }, { "command" : "thisshouldfail" }, { "command" : "anotherfailcommand" } ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
@@ -83,7 +84,7 @@ class DemoMain:
     data_socket = demo_nw_if.DemoNwIf.connect((api_ip_address, image_data_port_no))
     stream_client = demo_image_data_stream_client.DemoImageDataStreamClient(data_socket)
     demo_viewer = demo_image_viewer.DemoImageViewer(low_res)
-    api_test_string = '{ "request" : { "commands" : [ "start_streaming" ] } }'
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "start_streaming" } ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
@@ -96,7 +97,7 @@ class DemoMain:
     data_socket.close()
 
     #Requesting a capture_image now should fail as the streaming service is active
-    api_test_string = '{ "request" : { "commands" : [ "capture_image" ] } }'
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "capture_image" } ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
@@ -110,7 +111,7 @@ class DemoMain:
     api_socket = demo_nw_if.DemoNwIf.connect((api_ip_address, api_service))
 
     #Last request shows a combination of a config request followed by a kill of the server process
-    api_test_string = '{ "request" : { "config" : { "image_data_port_no" : "3070" }, "commands" : [ "stop_streaming", "kill_server_process" ] } }'
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "set_config", "args" : { "image_data_port_no" : "3070" } }, { "command" : "stop_streaming" }, { "command" : "kill_server_process" } ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     #We won't get a response from a kill_server_process request. Close the socket.
     api_socket.close()
