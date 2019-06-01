@@ -23,8 +23,8 @@ class RpiCamCmdHandler:
       handlers = self.commands[command]
       for handler in handlers:
         response[command].update(handler(command, args))
-    except:
-      print('Failed to find handler for command. Registered commands {0}'.format(self.commands))
+    except Exception as e:
+      print('Exception occurred when handling command {0}. Exception {1}'.format(command, e))
       response[command].update({"result" : "NOK - Command not recognized"})
     return response
 

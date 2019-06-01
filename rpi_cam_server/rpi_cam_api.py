@@ -4,7 +4,7 @@ import json
 
 class RpiCamApi():
   def __init__(self, config, cmd_handler, service_discovery):
-    cmd_handler.register_command('kill_server_process', self.stop)
+    cmd_handler.register_command('kill_server_process', self.kill_server_process)
     self.active = False
     self.config = config
     self.cmd_handler = cmd_handler
@@ -39,7 +39,7 @@ class RpiCamApi():
   def start(self):
     self.__init_internal()
 
-  def stop(self):
+  def kill_server_process(self, command, args):
     response = {"debug" : "RpiCamApi called"}
     self.active = False
     for client_handler in self.client_handlers:
