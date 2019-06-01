@@ -28,6 +28,7 @@ class RpiCamNwTL:
 
   @staticmethod
   def send_data(socket, data):
-    dataSize = (len(data)).to_bytes(4, byteorder='little')
-    socket.sendall(dataSize)
+    data_size = (len(data)).to_bytes(4, byteorder='little')
+    print('RpiCamNwTL sending {0} bytes'.format(len(data)))
+    socket.sendall(data_size)
     socket.sendall(data)

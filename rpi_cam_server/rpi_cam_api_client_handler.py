@@ -19,7 +19,8 @@ class RpiCamApiClientHandler(Thread):
       try:
         data = rpi_cam_nw_tl.RpiCamNwTL.receive_data(self, self.connection[0])
         self.api.handle_client_request(self, data)
-      except:
+      except Exception as e:
+        print('Exception occurred {0}'.format(e))
         self.stop()        
         self.api.remove_client_handler(self)
 

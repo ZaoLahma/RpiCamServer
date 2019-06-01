@@ -43,6 +43,7 @@ class DemoNwIf:
     data_size = bytearray(header[0:4])
     try:
       data_size = struct.unpack("<L", data_size)[0]
+      print("DemoNwIf received data size {0}".format(data_size))
       data = DemoNwIf.receive_blocking(socket, data_size)
     except:
       return None

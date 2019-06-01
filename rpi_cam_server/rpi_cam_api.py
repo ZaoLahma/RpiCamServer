@@ -63,7 +63,9 @@ class RpiCamApi():
       for req_type in req_types:
         print('req_type {0}'.format(req_type))
         response['response'].update(self.cmd_handler.handle_commands(json_object['request'][req_type]))
+    print('before dumps')
     response = json.dumps(response)
+    print('after dumps')
 
     try:
       client_handler.send(response.encode('utf-8'))
