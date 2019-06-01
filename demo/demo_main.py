@@ -116,7 +116,7 @@ class DemoMain:
     data_socket.close()
 
     #Requesting a capture_image now should fail as the streaming service is active
-    api_test_string = '{ "request" : { "commands" : [ { "command" : "capture_image" } ] } }'
+    api_test_string = '{ "request" : { "commands" : [ { "command" : "capture_image_sync" }, { "command" : "capture_image_async" } ] } }'
     demo_nw_if.DemoNwIf.send_command(api_socket, api_test_string)
     api_response = demo_nw_if.DemoNwIf.receive_data(api_socket).decode('utf-8')
     print('Received response {0}'.format(api_response))
